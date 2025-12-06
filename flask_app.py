@@ -16,6 +16,12 @@ from flask import Flask, render_template, request, jsonify, session, send_from_d
 import torch
 from PIL import Image
 import io
+import gc
+
+# Set PyTorch to use minimal memory
+torch.set_num_threads(1)
+if torch.cuda.is_available():
+    torch.cuda.empty_cache()
 
 # Import custom modules
 from explanable_ai import ExplainableDefectDetector
