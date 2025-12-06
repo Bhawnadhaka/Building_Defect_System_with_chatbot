@@ -10,21 +10,19 @@ pip install --upgrade pip
 pip install -r requirements.txt
 
 echo ""
-echo "📥 Downloading AI model from Google Drive..."
-# Download using gdown command with proper file ID
-gdown 1gtxzOlKkBGEv_A4AP3zzZOvYfvEoqdYo -O best_defect_model.pth
+echo "📥 Downloading AI model from Hugging Face..."
+# Download from Hugging Face (reliable and fast)
+wget "https://huggingface.co/Bhawana285/building_defect_model/resolve/main/best_defect_model.pth" -O best_defect_model.pth
 
-# Verify the file was downloaded and is large enough (should be ~400MB)
+# Verify the file was downloaded and is correct size
 if [ -f "best_defect_model.pth" ]; then
     FILE_SIZE=$(stat -c%s "best_defect_model.pth" 2>/dev/null || echo "0")
-    if [ "$FILE_SIZE" -gt 100000000 ]; then
+    if [ "$FILE_SIZE" -gt 10000000 ]; then
         echo "✅ Model file downloaded successfully ($(du -h best_defect_model.pth | cut -f1))"
     else
-        echo "❌ Downloaded file is too small ($FILE_SIZE bytes) - likely an error page"
-        echo "💡 Upload model to Hugging Face for reliable downloads"
-        echo "📝 Instructions: https://huggingface.co/docs/hub/models-uploading"
-        # Don't fail build - app will work without model (chatbot only)
+        echo "❌ Downloaded file is too small ($FILE_SIZE bytes)"
         echo "⚠️ Continuing without model - chatbot features will still work"
+        rm -f best_defect_model.pth
     fi
 else
     echo "❌ Model file not found after download"
